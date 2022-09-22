@@ -1,3 +1,4 @@
+//This file is separate from server
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import users from './data/users.js';
@@ -6,7 +7,6 @@ import User from './Models/UserModel.js';
 import Product from './Models/ProductModel.js';
 import Order from './Models/OrderModel.js';
 import connectDb from './config/db.js';
-//This file is separate from server
 dotenv.config();
 connectDb();
 

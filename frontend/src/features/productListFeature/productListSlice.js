@@ -37,7 +37,7 @@ const productListSlice = createSlice({
 
     [listProducts.rejected]: (state, action) => {
       return {
-        loading: false,
+        loading: true,
         error: action.payload,
       };
     },

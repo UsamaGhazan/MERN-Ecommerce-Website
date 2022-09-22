@@ -9,12 +9,14 @@ const initialState = {
 
 export const listProductDetails = createAsyncThunk(
   'getProductDetail',
-  async (name) => {
-    console.log(name);
+  async (id) => {
+    //id is comming from ProductScreen
     try {
-      const resp = await axios(`/api/products/${name}`);
-      return resp.data;
-    } catch (error) {}
+      const { data } = await axios(`/api/products/${id}`); //ye sara data nikal kar action.payload mein dal deta hy
+      return data;
+    } catch (error) {
+      return error;
+    }
   }
 );
 
@@ -39,8 +41,8 @@ const productDetailSlice = createSlice({
 
     [listProductDetails.rejected]: (state, action) => {
       return {
-        loading: false,
-        error: action.payload,
+        loading: true,
+        error: action.payload, //-----------------------------------------------------------------------
       };
     },
   },

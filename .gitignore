@@ -6,6 +6,7 @@ node_modules/
 /.pnp
 .pnp.js
 justforreference
+Things to check.txt
 # testing
 /coverage
 
