@@ -21,6 +21,7 @@ export const addToCart = createAsyncThunk(
       return productData;
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 );

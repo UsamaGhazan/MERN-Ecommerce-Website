@@ -12,7 +12,9 @@ export const listProducts = createAsyncThunk('getProductList', async () => {
   try {
     const resp = await axios('/api/products');
     return resp.data;
-  } catch (error) {}
+  } catch (error) {
+    return error;
+  }
 });
 
 const productListSlice = createSlice({
@@ -37,7 +39,7 @@ const productListSlice = createSlice({
 
     [listProducts.rejected]: (state, action) => {
       return {
-        loading: true,
+        loading: false,
         error: action.payload,
       };
     },
