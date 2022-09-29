@@ -3,7 +3,7 @@ import axios from 'axios';
 
 //sabsy pehly frontend sy backend ko token ki request marein gay login karty hoay
 export const login = createAsyncThunk(
-  'getUser',
+  'loginUser',
   async ({ email, password }, thunkAPI) => {
     try {
       //jab backend ko data bhej rahy hein to humy header mein content-type bhi btani pary gi ... usky leye config object banaya hy
@@ -36,9 +36,14 @@ export const login = createAsyncThunk(
 
 const initialState = {};
 
-export const userSlice = createSlice({
+export const loginUserSlice = createSlice({
   name: 'userLoginReducer',
   initialState,
+  reducers: {
+    logout: (state, action) => {
+      localStorage.removeItem('userInfo');
+    },
+  },
   extraReducers: {
     //extra reducers sirf async operations k leye hein ... normally reducer use hongay
     [login.pending]: (state) => {
@@ -62,5 +67,5 @@ export const userSlice = createSlice({
     },
   },
 });
-
-export default userSlice.reducer;
+export const { logout } = loginUserSlice.actions;
+export default loginUserSlice.reducer;
