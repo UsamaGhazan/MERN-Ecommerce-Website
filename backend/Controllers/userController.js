@@ -19,7 +19,7 @@ const authUser = asyncHandler(async (req, res) => {
     });
   } else {
     //Agr user present ni hy
-    res.status(401);
+    res.status(StatusCodes.UNAUTHORIZED);
     throw new Error('Invalid email or password');
   }
 });
@@ -59,6 +59,7 @@ const registerUser = asyncHandler(async (req, res) => {
 const getUserProfile = asyncHandler(async (req, res) => {
   // console.log(req.user);
   const user = await User.findById(req.user._id); //will give current logged in user
+  //agr user hy
   if (user) {
     res.json({
       _id: user._id,
@@ -67,9 +68,38 @@ const getUserProfile = asyncHandler(async (req, res) => {
       isAdmin: user.isAdmin,
     });
   } else {
-    res.status(404);
+    res.status(StatusCodes.NOT_FOUND);
     throw new Error('User not found');
   }
 });
 
-export { authUser, registerUser, getUserProfile };
+//Get User Profile
+//Private Route
+//User apni profile sirf logged in honay k bad dekh sakta hy na k har koi access kar ly is leye ye private route hy
+const updateUserProfile = asyncHandler(async (req, res) => {
+  // console.log(req.user);
+  const user = await User.findById(req.user._id); //will give current logged in user
+  if (user) {
+    user.name = req.body.name || user.name; //agr req.body.name mein ni hy to mtlb k user ny name update nai kea is leye wo purana wala hi rakh dea
+    user.email = req.body.email || user.email;
+    //Agr password hy to ye karo... agr password modify ho to userModel mein jo pre function hy wo run hoga aur uski waja sy password b automatically encrypt hojayega
+    if (req.body.password) {
+      user.password = req.body.password;
+    }
+
+    //pehly information ko save kary ga phir response send kary ga
+    const updatedUser = await user.save();
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+      token: generateToken(updatedUser._id), //Step 2: We are sending token to frontend
+    });
+  } else {
+    res.status(StaticRange.NOT_FOUND);
+    throw new Error('User not found');
+  }
+});
+
+export { authUser, registerUser, getUserProfile, updateUserProfile };

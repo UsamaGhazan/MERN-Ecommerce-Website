@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
-import { login } from '../features/loginUserFeature/loginUserSlice';
+import { login } from '../features/UserFeature/loginUserSlice';
 
 const LoginScreen = () => {
   //email aur passwor ki component level state is leye bana rahy hein kun k inka use sirf idr e hy

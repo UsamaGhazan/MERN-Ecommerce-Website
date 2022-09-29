@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap'; //only for bootstrap component ... otherwise use Link
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
-import { logout } from '../features/loginUserFeature/loginUserSlice';
+import { logout } from '../features/UserFeature/loginUserSlice';
 const Header = () => {
   const dispatch = useDispatch();
   const userLogin = useSelector((store) => store.userLogin);
