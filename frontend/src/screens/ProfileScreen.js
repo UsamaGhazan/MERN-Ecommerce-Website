@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { getUserDetails } from '../features/UserFeature/userDetailsSlice';
+import { updateUserProfile } from '../features/UserFeature/updateProfileSlice';
 
 const ProfileScreen = () => {
   //email aur passwor ki component level state is leye bana rahy hein kun k inka use sirf idr e hy
@@ -16,8 +17,7 @@ const ProfileScreen = () => {
   const [message, setMessage] = useState(null);
 
   const dispatch = useDispatch();
-  const location = useLocation();
-  // console.log(location);
+
   const navigate = useNavigate();
   //agr pehly sy hi login hein to login screen pr na any k leye redirect use krein gay
 
@@ -27,6 +27,8 @@ const ProfileScreen = () => {
   //Agr user login ho tab hi ye profile access honi chaiye
   const userLogin = useSelector((store) => store.userLogin);
   const { userInfo } = userLogin;
+  const userUpdateProfile = useSelector((store) => store.userUpdateProfile);
+  const { success } = userUpdateProfile;
 
   useEffect(() => {
     //Agr user logged nai hy to login page pr redirect kr rahy
@@ -35,9 +37,10 @@ const ProfileScreen = () => {
     } else {
       //---------------------------------------------------------------------------------------
       if (!user.name) {
+        //Bug Fix: Name update krny pr Navbar mein logout kr k login kry beghair ni hora tha (USER_UPDATE_PROFILE_RESET)
+        // dispatch(USER_UPDATE_PROFILE_RESET);
         dispatch(getUserDetails('profile')); //-------------------------------
       } else {
-        console.log(user.name);
         setName(user.name);
         setEmail(user.email);
       }
@@ -51,6 +54,7 @@ const ProfileScreen = () => {
       setMessage('Password donot match');
     } else {
       //Dispatch update profile
+      dispatch(updateUserProfile({ id: user._id, name, email, password }));
     }
   };
   return (
@@ -60,6 +64,7 @@ const ProfileScreen = () => {
         {/* Agr password match ni hota to setMessage chaly ga useeffect mein aur message state mil jayegi */}
         {message && <Message variant='danger'>{message}</Message>}
         {error && <Message variant='danger'>{error}</Message>}
+        {success && <Message variant='success'>Profile Updated</Message>}
         {loading && <Loader />}
         <Form onSubmit={submitHandler}>
           <Form.Group controlId='name'>

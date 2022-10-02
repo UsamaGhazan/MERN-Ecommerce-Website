@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, current } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 export const addToCart = createAsyncThunk(
   'addToCart',
@@ -35,7 +35,6 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     CART_REMOVE_ITEM: (state, action) => {
-      console.log(action);
       state.cartItems = state.cartItems.filter(
         (item) => item.product !== action.payload
       );

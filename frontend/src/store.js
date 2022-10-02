@@ -5,6 +5,7 @@ import CartReducer from './features/addToCart/cartSlice';
 import userLoginReducer from './features/UserFeature/loginUserSlice';
 import userRegisterReducer from './features/UserFeature/registerUserSlice';
 import userDetailsReducer from './features/UserFeature/userDetailsSlice';
+import userUpdateProfileReducer from './features/UserFeature/updateProfileSlice';
 
 // yahan hum local storage sy data ly rahy hein jo cartSlice mein store kea tha ... JSON.parse is leye run kea hy kun k stringify kea tha data cartSlice mein
 const cartItemsFromStorage = localStorage.getItem('cartItems')
@@ -32,6 +33,7 @@ const store = configureStore({
     userLogin: userLoginReducer,
     userRegister: userRegisterReducer,
     userDetails: userDetailsReducer,
+    userUpdateProfile: userUpdateProfileReducer,
   },
   preloadedState: initialState, //for local storage
 });

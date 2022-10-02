@@ -1,27 +1,30 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+// import { login } from './loginUserSlice';
 
 //sabsy pehly frontend sy backend ko token ki request marein gay login karty hoay
-export const login = createAsyncThunk(
-  'loginUser',
-  async ({ email, password }, thunkAPI) => {
+export const updateUserProfile = createAsyncThunk(
+  'updateUserProfile',
+  async (user, thunkAPI) => {
     try {
+      const {
+        userLogin: { userInfo }, //local storage sy userinfo lety hoay... loggedIn user ka pta chal jaeyga
+      } = thunkAPI.getState();
       //jab backend ko data bhej rahy hein to humy header mein content-type bhi btani pary gi ... usky leye config object banaya hy
       //Isi mein hum token b pass karein gay protective routes k leye
+      //Header mein token b bhejna hoga is lye Authoriation mein bhejein gay
       const config = {
         headers: {
           // 'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.token}`,
         },
       };
-      const { data } = await axios.post(
-        `/api/users/login`,
-        { email, password },
-        config
-      );
-      //Setting User data to local storage which we are getting from backend
-      localStorage.setItem('userInfo', JSON.stringify(data));
-      console.log(data);
+      const { data } = await axios.put(`/api/users/profile`, user, config);
+      //Bug Fix: Name update krny pr Navbar mein logout kr k login kry beghair ni hora tha
+      // console.log(thunkAPI);
+      // thunkAPI.dispatch(login.e);
+      // localStorage.setItem('userInfo', JSON.stringify(data));
       return data;
     } catch (error) {
       const newError =
@@ -36,30 +39,31 @@ export const login = createAsyncThunk(
 
 const initialState = {};
 
-export const loginUserSlice = createSlice({
+export const updateProfileSlice = createSlice({
   name: 'userLoginReducer',
   initialState,
-  reducers: {
-    logout: (state, action) => {
-      localStorage.removeItem('userInfo');
-    },
-  },
+  // reducers: {
+  //   USER_UPDATE_PROFILE_RESET: () => {
+  //     return {};
+  //   },
+  // },
   extraReducers: {
     //extra reducers sirf async operations k leye hein ... normally reducer use hongay
-    [login.pending]: () => {
+    [updateUserProfile.pending]: (state) => {
       return {
         loading: true,
       };
     },
 
-    [login.fulfilled]: (state, action) => {
+    [updateUserProfile.fulfilled]: (state, action) => {
       return {
         loading: false,
+        success: true,
         userInfo: action.payload,
       };
     },
 
-    [login.rejected]: (state, action) => {
+    [updateUserProfile.rejected]: (state, action) => {
       return {
         loading: false,
         error: action.payload,
@@ -67,6 +71,6 @@ export const loginUserSlice = createSlice({
     },
   },
 });
-console.log(loginUserSlice.extraReducers);
-export const { logout } = loginUserSlice.actions;
-export default loginUserSlice.reducer;
+console.log(updateProfileSlice.actions);
+export const { USER_UPDATE_PROFILE_RESET } = updateProfileSlice.actions;
+export default updateProfileSlice.reducer;

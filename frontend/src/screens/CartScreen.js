@@ -33,7 +33,7 @@ const CartScreen = () => {
     dispatch(CART_REMOVE_ITEM(id));
   };
   const checkOutHandler = () => {
-    navigate('/login?redirect=shipping'); //agr user login hy to shipping pr ly jao warna login pr ly jao
+    navigate(`/login?redirect=shipping`); //agr user login hy to shipping pr ly jao warna login pr ly jao
   };
 
   return (
