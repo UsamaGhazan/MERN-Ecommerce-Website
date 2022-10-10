@@ -28,6 +28,7 @@ export const addToCart = createAsyncThunk(
 
 const initialState = {
   cartItems: [],
+  shippingAddress: {},
 };
 
 const cartSlice = createSlice({
@@ -38,7 +39,22 @@ const cartSlice = createSlice({
       state.cartItems = state.cartItems.filter(
         (item) => item.product !== action.payload
       );
-      // localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems));// local storage issue... (here redux syntax used... change accordingly)
+      // localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems));// local storage issue...
+    },
+    saveShippingAddress: (state, action) => {
+      console.log(action.payload);
+      localStorage.setItem('shippingAddress', JSON.stringify(action.payload));
+      return {
+        ...state,
+        shippingAddress: action.payload,
+      };
+    },
+    savePaymentMethod: (state, action) => {
+      console.log(action.payload);
+      return {
+        ...state,
+        paymentMethod: action.payload,
+      };
     },
   },
   extraReducers: {
@@ -66,5 +82,6 @@ const cartSlice = createSlice({
     },
   },
 });
-export const { CART_REMOVE_ITEM } = cartSlice.actions;
+export const { CART_REMOVE_ITEM, saveShippingAddress, savePaymentMethod } =
+  cartSlice.actions;
 export default cartSlice.reducer;

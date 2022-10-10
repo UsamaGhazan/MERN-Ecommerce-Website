@@ -21,7 +21,6 @@ export const login = createAsyncThunk(
       );
       //Setting User data to local storage which we are getting from backend
       localStorage.setItem('userInfo', JSON.stringify(data));
-      console.log(data);
       return data;
     } catch (error) {
       const newError =
@@ -67,6 +66,5 @@ export const loginUserSlice = createSlice({
     },
   },
 });
-console.log(loginUserSlice.extraReducers);
 export const { logout } = loginUserSlice.actions;
 export default loginUserSlice.reducer;

@@ -14,7 +14,7 @@ const LoginScreen = () => {
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
   const location = useLocation();
-  console.log(location);
+  // console.log(location);
   const navigate = useNavigate();
   //agr pehly sy hi login hein to login screen pr na any k leye redirect use krein gay
   const redirect = location.search ? location.search.split('=')[1] : '/';

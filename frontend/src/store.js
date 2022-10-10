@@ -6,7 +6,6 @@ import userLoginReducer from './features/UserFeature/loginUserSlice';
 import userRegisterReducer from './features/UserFeature/registerUserSlice';
 import userDetailsReducer from './features/UserFeature/userDetailsSlice';
 import userUpdateProfileReducer from './features/UserFeature/updateProfileSlice';
-
 // yahan hum local storage sy data ly rahy hein jo cartSlice mein store kea tha ... JSON.parse is leye run kea hy kun k stringify kea tha data cartSlice mein
 const cartItemsFromStorage = localStorage.getItem('cartItems')
   ? JSON.parse(localStorage.getItem('cartItems'))
@@ -15,10 +14,14 @@ const cartItemsFromStorage = localStorage.getItem('cartItems')
 const userInfoFromStorage = localStorage.getItem('userInfo')
   ? JSON.parse(localStorage.getItem('userInfo'))
   : null; //agr user info ni available to null return kar do
+const shippingAddressFromStorage = localStorage.getItem('shippingAddress')
+  ? JSON.parse(localStorage.getItem('shippingAddress'))
+  : {};
 
 const initialState = {
   cart: {
     cartItems: cartItemsFromStorage,
+    shippingAddress: shippingAddressFromStorage,
   },
   userLogin: {
     userInfo: userInfoFromStorage,
