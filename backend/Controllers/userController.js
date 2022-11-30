@@ -75,7 +75,6 @@ const getUserProfile = asyncHandler(async (req, res) => {
 
 //Update User Profile
 //Private Route
-//User apni profile sirf logged in honay k bad dekh sakta hy na k har koi access kar ly is leye ye private route hy
 const updateUserProfile = asyncHandler(async (req, res) => {
   // console.log(req.user);
   const user = await User.findById(req.user._id); //will give current logged in user
@@ -104,11 +103,68 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 
 //Get All Users
 //Private Route/Admin
-//User apni profile sirf logged in honay k bad dekh sakta hy na k har koi access kar ly is leye ye private route hy
 const getUsers = asyncHandler(async (req, res) => {
   // console.log(req.user);
-  const users = await User.find({}); //will give all
+  const users = await User.find({}); //will give all users
   res.json(users);
 });
 
-export { authUser, registerUser, getUserProfile, updateUserProfile, getUsers };
+//Delete User
+//Private Route/Admin
+const deleteUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+  if (user) {
+    await user.remove();
+    res.json({ message: 'User removed' });
+  } else {
+    res.statusCode.NOT_FOUND;
+    throw new Error('User not found');
+  }
+});
+
+//Get User By Id
+//Private Route/Admin
+const getUserById = asyncHandler(async (req, res) => {
+  // console.log(req.user);
+  //password ni chaiye frontend pr is lye usy nikal dea
+  const user = await User.findById(req.params.id).select('-password');
+  if (user) {
+    res.json(user);
+  } else {
+    res.statusCode.NOT_FOUND;
+    throw new Error('User not found');
+  }
+});
+
+//Update User
+//Private Route/Admin
+const updateUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+  if (user) {
+    user.name = req.body.name || user.name; //agr req.body.name mein ni hy to mtlb k user ny name update nai kea is leye wo purana wala hi rakh dea
+    user.email = req.body.email || user.email;
+    user.isAdmin = req.body.isAdmin;
+    //pehly information ko save kary ga phir response send kary ga
+    const updatedUser = await user.save();
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+    });
+  } else {
+    res.status(StaticRange.NOT_FOUND);
+    throw new Error('User not found');
+  }
+});
+
+export {
+  authUser,
+  registerUser,
+  getUserProfile,
+  updateUserProfile,
+  getUsers,
+  deleteUser,
+  getUserById,
+  updateUser,
+};

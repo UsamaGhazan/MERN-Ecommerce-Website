@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { USER_LIST_RESET } from './userListSlice';
 
 //sabsy pehly frontend sy backend ko token ki request marein gay login karty hoay
 export const login = createAsyncThunk(

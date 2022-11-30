@@ -13,6 +13,7 @@ import ShippingScreen from './screens/ShippingScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import PlaceOrderScreen from './screens/PlaceOrderScreen';
 import OrderScreen from './screens/OrderScreen';
+import UserListScreen from './screens/UserListScreen';
 const App = () => {
   return (
     <BrowserRouter>
@@ -32,6 +33,8 @@ const App = () => {
             <Route path='cart' element={<CartScreen />}>
               <Route path=':id' element={<CartScreen />} />
             </Route>
+            <Route path='/admin/userList' element={<UserListScreen />} exact />
+
             {/* nested routing ki waja sy path render hojaye ga chae id di ho ya na di ho.. aur yei humy chaiye is case mein*/}
           </Routes>
         </Container>
