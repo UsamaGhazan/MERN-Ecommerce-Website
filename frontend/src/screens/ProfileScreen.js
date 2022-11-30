@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Form, Button, Row, Col } from 'react-bootstrap';
+import { Form, Button, Row, Col, Table } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { getUserDetails } from '../features/UserFeature/userDetailsSlice';
 import { updateUserProfile } from '../features/UserFeature/updateProfileSlice';
+import { getOrdersList } from '../features/OrderFeature/myOrderListSlice';
 
 const ProfileScreen = () => {
   //email aur passwor ki component level state is leye bana rahy hein kun k inka use sirf idr e hy
@@ -30,6 +32,10 @@ const ProfileScreen = () => {
   const userUpdateProfile = useSelector((store) => store.userUpdateProfile);
   const { success } = userUpdateProfile;
 
+  const myOrderList = useSelector((store) => store.myOrderList);
+  const { loading: loadingOrders, error: errorOrders, orders } = myOrderList;
+  console.log(orders);
+
   useEffect(() => {
     //Agr user logged nai hy to login page pr redirect kr rahy
     if (!userInfo) {
@@ -39,7 +45,8 @@ const ProfileScreen = () => {
       if (!user.name) {
         //Bug Fix: Name update krny pr Navbar mein logout kr k login kry beghair ni hora tha (USER_UPDATE_PROFILE_RESET)
         // dispatch(USER_UPDATE_PROFILE_RESET);
-        dispatch(getUserDetails('profile')); //-------------------------------
+        dispatch(getUserDetails('profile')); //-------------------------------7
+        dispatch(getOrdersList());
       } else {
         setName(user.name);
         setEmail(user.email);
@@ -114,6 +121,56 @@ const ProfileScreen = () => {
       </Col>
       <Col md={9}>
         <h2>My Orders</h2>
+        {loadingOrders ? (
+          <Loader />
+        ) : errorOrders ? (
+          <Message variant='danger'>{errorOrders}</Message>
+        ) : (
+          <Table striped bordered hover responsive className='table-sm'>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>DATE</th>
+                <th>TOTAL</th>
+                <th>PAID</th>
+                <th>DELIVERED</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {orders.map((order) => (
+                <tr key={order._id}>
+                  <td>{order._id}</td>
+                  {/* just date leny k leye */}
+                  <td>{order.paidAt.substring(0, 10)}</td>
+                  <td>{order.totalPrice}</td>
+                  <td>
+                    {order.isPaid ? (
+                      order.paidAt.substring(0, 10)
+                    ) : (
+                      <i className='fas fa-times' style={{ color: 'red' }}></i>
+                    )}
+                  </td>
+                  <td>
+                    {order.isDelivered ? (
+                      order.deliveredAt.substring(0, 10)
+                    ) : (
+                      <i className='fas fa-times' style={{ color: 'red' }}></i>
+                    )}
+                  </td>
+                  <td>
+                    <LinkContainer to={`/order/${order._id}`}>
+                      <Button className='btn-sm' variant='light'>
+                        {' '}
+                        Details
+                      </Button>
+                    </LinkContainer>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
       </Col>
     </Row>
   );

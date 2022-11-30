@@ -38,8 +38,13 @@ const initialState = {
 };
 
 export const userDetailsSlice = createSlice({
-  name: 'userLoginReducer',
+  name: 'userDetails',
   initialState,
+  reducers: {
+    USER_DETAILS_RESET: () => {
+      return { user: {} };
+    },
+  },
   extraReducers: {
     //extra reducers sirf async operations k leye hein ... normally reducer use hongay
     [getUserDetails.pending]: (state) => {
@@ -64,4 +69,5 @@ export const userDetailsSlice = createSlice({
     },
   },
 });
+export const { USER_DETAILS_RESET } = userDetailsSlice.actions;
 export default userDetailsSlice.reducer;

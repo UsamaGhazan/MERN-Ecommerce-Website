@@ -18,14 +18,16 @@ const LoginScreen = () => {
   const navigate = useNavigate();
   //agr pehly sy hi login hein to login screen pr na any k leye redirect use krein gay
   const redirect = location.search ? location.search.split('=')[1] : '/';
+
   // console.log(redirect);
   const userLogin = useSelector((store) => store.userLogin);
   const { loading, error, userInfo } = userLogin;
 
   useEffect(() => {
-    //Agr user logged nai hy to userInfo hogi... yahan check kr rahy k kea user login hy
-    if (userInfo) {
-      //agr user pehly sy logged in hy
+    //agr user khudsy login kr raha hy pehly to loggedin karny k bad home page pr lkr jao warna jo redirect mein value aye us page pr
+    if (userInfo && redirect === '/') {
+      navigate('/');
+    } else if (userInfo && redirect) {
       navigate(`/${redirect}`);
     }
   }, [userInfo, navigate, redirect]);

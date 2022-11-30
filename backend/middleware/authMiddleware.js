@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken'; //Step 3: Validate the token
 import AsyncHandler from 'express-async-handler';
 import User from '../Models/UserModel.js';
-
+import { StatusCodes } from 'http-status-codes';
+//Is user logged in?
 const protect = AsyncHandler(async (req, res, next) => {
   let token;
   if (
@@ -27,4 +28,14 @@ const protect = AsyncHandler(async (req, res, next) => {
   }
 });
 
-export { protect };
+//Is User Admin?
+const admin = (req, res, next) => {
+  if (req.user && req.user.isAdmin) {
+    next();
+  } else {
+    res.status(StatusCodes.UNAUTHORIZED);
+    throw new Error('Not authorized as an Admin');
+  }
+};
+
+export { protect, admin };

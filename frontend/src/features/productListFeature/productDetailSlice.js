@@ -42,11 +42,10 @@ const productDetailSlice = createSlice({
     [listProductDetails.rejected]: (state, action) => {
       return {
         loading: true,
-        error: action.payload, //-----------------------------------------------------------------------
+        error: action.payload,
       };
     },
   },
 });
-// export const { PRODUCT_LIST_REQUEST, PRODUCT_LIST_SUCCESS, PRODUCT_LIST_FAIL } =
-//   productListSlice.actions;
+
 export default productDetailSlice.reducer;

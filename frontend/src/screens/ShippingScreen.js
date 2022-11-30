@@ -7,7 +7,6 @@ import CheckoutSteps from '../components/CheckoutSteps';
 import { saveShippingAddress } from '../features/addToCart/cartSlice';
 const ShippingScreen = () => {
   const { shippingAddress } = useSelector((store) => store.cart);
-  console.log(shippingAddress);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();

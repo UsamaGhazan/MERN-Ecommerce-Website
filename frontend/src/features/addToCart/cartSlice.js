@@ -20,7 +20,6 @@ export const addToCart = createAsyncThunk(
       };
       return productData;
     } catch (error) {
-      console.log(error);
       return error;
     }
   }
@@ -32,7 +31,7 @@ const initialState = {
 };
 
 const cartSlice = createSlice({
-  name: 'cartReducer',
+  name: 'cart',
   initialState,
   reducers: {
     CART_REMOVE_ITEM: (state, action) => {
@@ -42,7 +41,6 @@ const cartSlice = createSlice({
       // localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems));// local storage issue...
     },
     saveShippingAddress: (state, action) => {
-      console.log(action.payload);
       localStorage.setItem('shippingAddress', JSON.stringify(action.payload));
       return {
         ...state,
@@ -50,7 +48,6 @@ const cartSlice = createSlice({
       };
     },
     savePaymentMethod: (state, action) => {
-      console.log(action.payload);
       return {
         ...state,
         paymentMethod: action.payload,

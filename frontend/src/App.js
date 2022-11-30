@@ -12,6 +12,7 @@ import ProfileScreen from './screens/ProfileScreen';
 import ShippingScreen from './screens/ShippingScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import PlaceOrderScreen from './screens/PlaceOrderScreen';
+import OrderScreen from './screens/OrderScreen';
 const App = () => {
   return (
     <BrowserRouter>
@@ -20,6 +21,7 @@ const App = () => {
         <Container>
           <Routes>
             <Route path='/' element={<HomeScreen />} exact />
+            <Route path='/order/:id' element={<OrderScreen />} exact />
             <Route path='/shipping' element={<ShippingScreen />} exact />
             <Route path='/payment' element={<PaymentScreen />} exact />
             <Route path='/placeorder' element={<PlaceOrderScreen />} exact />

@@ -73,7 +73,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-//Get User Profile
+//Update User Profile
 //Private Route
 //User apni profile sirf logged in honay k bad dekh sakta hy na k har koi access kar ly is leye ye private route hy
 const updateUserProfile = asyncHandler(async (req, res) => {
@@ -102,4 +102,13 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-export { authUser, registerUser, getUserProfile, updateUserProfile };
+//Get All Users
+//Private Route/Admin
+//User apni profile sirf logged in honay k bad dekh sakta hy na k har koi access kar ly is leye ye private route hy
+const getUsers = asyncHandler(async (req, res) => {
+  // console.log(req.user);
+  const users = await User.find({}); //will give all
+  res.json(users);
+});
+
+export { authUser, registerUser, getUserProfile, updateUserProfile, getUsers };

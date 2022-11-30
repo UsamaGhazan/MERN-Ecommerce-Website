@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 import {
   Button,
@@ -13,29 +13,62 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import CheckoutSteps from '../components/CheckoutSteps';
-
+import {
+  createOrder,
+  ORDER_CREATE_RESET,
+} from '../features/OrderFeature/orderCreateSlice';
+import { USER_DETAILS_RESET } from '../features/UserFeature/userDetailsSlice';
 const PlaceOrderScreen = () => {
-  // const dispatch=useDispatch()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const cart = useSelector((store) => store.cart);
   //Calculate Prices
   const addDecimals = (num) => {
     return (Math.round(num * 100) / 100).toFixed(2);
   };
-  cart.itemsPrice = addDecimals(
-    cart.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)
+  //Cart object ko modify karny k leye local copy bnai hy ...kun k kuch additional chezein add karni thien(prices)
+  const cartObject = { ...cart };
+  cartObject.itemsPrice = addDecimals(
+    cartObject.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)
   );
-  //agr 100 sy zaiyda keemat hy to 0 shipping price warna 100
-  // cart.shippingPrice = addDecimals(cart.itemsPrice > 100 ? 0 : 100);
-  // cart.taxPrice = addDecimals(Number((0.15 * cart.itemsPrice).toFixed(2)));
-  // cart.totalPrice = (
-  //   Number(cart.itemsPrice) +
-  //   Number(cart.shippingPrice) +
-  //   Number(cart.taxPrice)
-  // ).toFixed(2);
+  cartObject.shippingPrice = addDecimals(cartObject.itemsPrice < 100 ? 0 : 100);
+  cartObject.taxPrice = addDecimals(
+    Number((0.15 * cartObject.itemsPrice).toFixed(2))
+  );
+  cartObject.totalPrice = (
+    Number(cartObject.itemsPrice) +
+    Number(cartObject.shippingPrice) +
+    Number(cartObject.taxPrice)
+  ).toFixed(2);
 
+  const orderCreate = useSelector((store) => store.orderCreate);
+  const { order, success, error } = orderCreate;
+
+  useEffect(() => {
+    // agr sab kuch theek sy chal gya hy (orderSlice mein) aur data mil gya hy to...
+    if (success) {
+      // agr order data mila hy to usmein sy _id property nikalo
+      navigate(`/order/${order._id}`);
+      dispatch(ORDER_CREATE_RESET());
+      dispatch(USER_DETAILS_RESET());
+    }
+    // To remove order._id dependency warning
+    // eslint-disable-next-line
+  }, [navigate, success]);
   const placeOrderHandler = () => {
-    console.log('Place Order');
+    dispatch(
+      createOrder({
+        orderItems: cart.cartItems,
+        shippingAddress: cart.shippingAddress,
+        paymentMethod: cart.paymentMethod,
+        itemsPrice: cartObject.itemsPrice, //taken from new object which was copy of cart object
+        shippingPrice: cartObject.shippingPrice,
+        taxPrice: cartObject.taxPrice,
+        totalPrice: cartObject.totalPrice,
+      })
+    );
   };
+
   return (
     <>
       <CheckoutSteps step1 step2 step3 step4 />
@@ -102,27 +135,30 @@ const PlaceOrderScreen = () => {
               <ListGroup.Item>
                 <Row>
                   <Col>Items</Col>
-                  <Col>${cart.itemsPrice}</Col>
+                  <Col>${cartObject.itemsPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Shipping</Col>
-                  <Col>${cart.shippingPrice}</Col>
+                  <Col>${cartObject.shippingPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Tax</Col>
-                  <Col>${cart.taxPrice}</Col>
+                  <Col>${cartObject.taxPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Total</Col>
-                  <Col>${cart.totalPrice}</Col>
+                  <Col>${cartObject.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
+              <ListGroupItem>
+                {error && <Message variant='danger'>{error}</Message>}
+              </ListGroupItem>
               <ListGroup.Item>
                 <Button
                   type='button'
