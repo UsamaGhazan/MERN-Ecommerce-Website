@@ -7,6 +7,8 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
 import { getUserDetails } from '../features/UserFeature/userDetailsSlice';
+import { updateUser } from '../features/UserFeature/updateUserSlice';
+import { USER_UPDATE_RESET } from '../features/UserFeature/updateUserSlice';
 const UserEditScreen = () => {
   const params = useParams();
   const userId = params.id;
@@ -17,27 +19,49 @@ const UserEditScreen = () => {
   const [isAdmin, setIsAdmin] = useState(false);
 
   const dispatch = useDispatch();
-  const location = useLocation();
-  // console.log(location);
+
   const navigate = useNavigate();
   //agr pehly sy hi login hein to login screen pr na any k leye redirect use krein gay
 
   const userDetails = useSelector((store) => store.userDetails);
   const { loading, error, user } = userDetails;
 
+  const userUpdate = useSelector((store) => store.userUpdate);
+  const {
+    loading: loadingUpdate,
+    error: errorUpdate,
+    success: successUpdate,
+  } = userUpdate;
+
   useEffect(() => {
-    //agr user ni exist karta ya jo url mein id hy wo store mein jo user hy uski id sy match ni karta to
-    if (!user.name || user._id !== userId) {
-      dispatch(getUserDetails(userId));
+    //agr user update hogya hy
+    if (successUpdate) {
+      dispatch(USER_UPDATE_RESET());
+      navigate('/admin/userList');
     } else {
-      setName(user.name);
-      setEmail(user.email);
-      setIsAdmin(user.isAdmin);
+      //agr user ni exist karta ya jo url mein id hy wo store mein jo user hy uski id sy match ni karta to
+      if (!user.name || user._id !== userId) {
+        dispatch(getUserDetails(userId));
+      } else {
+        setName(user.name);
+        setEmail(user.email);
+        setIsAdmin(user.isAdmin);
+      }
     }
-  }, [userId, dispatch, user._id, user.email, user.name, user.isAdmin]);
+  }, [
+    userId,
+    dispatch,
+    user._id,
+    user.email,
+    user.name,
+    user.isAdmin,
+    navigate,
+    successUpdate,
+  ]);
 
   const submitHandler = (e) => {
     e.preventDefault();
+    dispatch(updateUser({ _id: userId, name, email, isAdmin }));
   };
   return (
     <>
@@ -46,6 +70,8 @@ const UserEditScreen = () => {
       </Link>
       <FormContainer>
         <h1>Edit User</h1>
+        {loadingUpdate && <Loader />}
+        {errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
         {loading ? (
           <Loader />
         ) : error ? (
