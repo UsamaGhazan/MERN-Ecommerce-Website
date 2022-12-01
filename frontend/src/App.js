@@ -15,6 +15,8 @@ import PlaceOrderScreen from './screens/PlaceOrderScreen';
 import OrderScreen from './screens/OrderScreen';
 import UserListScreen from './screens/UserListScreen';
 import UserEditScreen from './screens/UserEditScreen';
+import ProductListScreen from './screens/ProductListScreen';
+
 const App = () => {
   return (
     <BrowserRouter>
@@ -22,24 +24,22 @@ const App = () => {
       <main className='py-3'>
         <Container>
           <Routes>
-            <Route path='/order/:id' element={<OrderScreen />} exact />
-            <Route path='/shipping' element={<ShippingScreen />} exact />
-            <Route path='/payment' element={<PaymentScreen />} exact />
-            <Route path='/placeorder' element={<PlaceOrderScreen />} exact />
-            <Route path='/login' element={<LoginScreen />} exact />
-            <Route path='/register' element={<RegisterScreen />} exact />
-            <Route path='/profile' element={<ProfileScreen />} exact />
+            <Route path='/order/:id' element={<OrderScreen />} />
+            <Route path='/shipping' element={<ShippingScreen />} />
+            <Route path='/payment' element={<PaymentScreen />} />
+            <Route path='/placeorder' element={<PlaceOrderScreen />} />
+            <Route path='/login' element={<LoginScreen />} />
+            <Route path='/register' element={<RegisterScreen />} />
+            <Route path='/profile' element={<ProfileScreen />} />
             <Route path='/product/:id' element={<ProductScreen />} />
             <Route path='cart' element={<CartScreen />}>
               <Route path=':id' element={<CartScreen />} />
             </Route>
-            <Route path='/admin/userList' element={<UserListScreen />} exact />
-            <Route
-              path='/admin/user/:id/edit'
-              element={<UserEditScreen />}
-              exact
-            />
-            <Route path='/' element={<HomeScreen />} exact />
+            <Route path='/admin/userList' element={<UserListScreen />} />
+            <Route path='/admin/user/:id/edit' element={<UserEditScreen />} />
+            <Route path='/admin/productList' element={<ProductListScreen />} />
+
+            <Route path='/' element={<HomeScreen />} />
 
             {/* nested routing ki waja sy path render hojaye ga chae id di ho ya na di ho.. aur yei humy chaiye is case mein*/}
           </Routes>
