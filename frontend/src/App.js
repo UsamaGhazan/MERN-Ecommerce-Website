@@ -14,6 +14,7 @@ import PaymentScreen from './screens/PaymentScreen';
 import PlaceOrderScreen from './screens/PlaceOrderScreen';
 import OrderScreen from './screens/OrderScreen';
 import UserListScreen from './screens/UserListScreen';
+import UserEditScreen from './screens/UserEditScreen';
 const App = () => {
   return (
     <BrowserRouter>
@@ -21,7 +22,6 @@ const App = () => {
       <main className='py-3'>
         <Container>
           <Routes>
-            <Route path='/' element={<HomeScreen />} exact />
             <Route path='/order/:id' element={<OrderScreen />} exact />
             <Route path='/shipping' element={<ShippingScreen />} exact />
             <Route path='/payment' element={<PaymentScreen />} exact />
@@ -34,6 +34,12 @@ const App = () => {
               <Route path=':id' element={<CartScreen />} />
             </Route>
             <Route path='/admin/userList' element={<UserListScreen />} exact />
+            <Route
+              path='/admin/user/:id/edit'
+              element={<UserEditScreen />}
+              exact
+            />
+            <Route path='/' element={<HomeScreen />} exact />
 
             {/* nested routing ki waja sy path render hojaye ga chae id di ho ya na di ho.. aur yei humy chaiye is case mein*/}
           </Routes>

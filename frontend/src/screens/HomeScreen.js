@@ -4,19 +4,9 @@ import { Row, Col } from 'react-bootstrap';
 import Product from '../components/Product';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-// import { listProducts } from '../actions/productActions';
 import { listProducts } from '../features/productListFeature/productListSlice';
 
 const HomeScreen = () => {
-  // const [products, setProducts] = useState([]);
-  //Getting data from backend... we will do it using Redux
-  // useEffect(() => {
-  //   const fetchProducts = async () => {
-  //     const { data } = await axios.get('/api/products'); //set a proxy to send request to backend
-  //     setProducts(data);
-  //   };
-  //   fetchProducts();
-  // }, []);
   const dispatch = useDispatch();
   const productList = useSelector((store) => store.productList);
   const { loading, error, products } = productList;
