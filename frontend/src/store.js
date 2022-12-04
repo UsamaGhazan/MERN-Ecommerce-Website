@@ -15,6 +15,7 @@ import userDeleteReducer from './features/UserFeature/userDeleteSlice';
 import updateUserReducer from './features/UserFeature/updateUserSlice';
 import productDeleteReducer from './features/productListFeature/productDeleteSlice';
 import productCreateReducer from './features/productListFeature/productCreateSlice';
+import productUpdateReducer from './features/productFeature/productUpdateSlice';
 // yahan hum local storage sy data ly rahy hein jo cartSlice mein store kea tha ... JSON.parse is leye run kea hy kun k stringify kea tha data cartSlice mein
 const cartItemsFromStorage = localStorage.getItem('cartItems')
   ? JSON.parse(localStorage.getItem('cartItems'))
@@ -43,6 +44,7 @@ const store = configureStore({
     productDetails: productDetailsReducer,
     productDelete: productDeleteReducer,
     productCreate: productCreateReducer,
+    productUpdate: productUpdateReducer,
     cart: CartReducer,
     userLogin: userLoginReducer,
     userRegister: userRegisterReducer,

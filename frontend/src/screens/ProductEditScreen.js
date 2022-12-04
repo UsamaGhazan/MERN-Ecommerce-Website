@@ -6,8 +6,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
-import { listProductDetails } from '../features/productListFeature/productDetailSlice';
-import { updateUser } from '../features/UserFeature/updateUserSlice';
+import { listProductDetails } from '../features/productFeature/productDetailSlice';
+import {
+  updateProduct,
+  PRODUCT_UPDATE_RESET,
+} from '../features/productFeature/productUpdateSlice';
 const ProductEditScreen = () => {
   const params = useParams();
   const productId = params.id;
@@ -28,25 +31,48 @@ const ProductEditScreen = () => {
   const productDetails = useSelector((store) => store.productDetails);
   const { loading, error, product } = productDetails;
 
+  const productUpdate = useSelector((store) => store.productUpdate);
+  const {
+    loading: loadingUpdate,
+    error: errorUpdate,
+    success: successUpdate,
+  } = productUpdate;
+
   useEffect(() => {
-    //agr user update hogya hy
-    //agr user ni exist karta ya jo url mein id hy wo store mein jo user hy uski id sy match ni karta to
-    if (!product || product._id !== productId) {
-      dispatch(listProductDetails(productId));
+    if (successUpdate) {
+      dispatch(PRODUCT_UPDATE_RESET());
+      navigate('/admin/productList');
     } else {
-      setName(product.name);
-      setPrice(product.price);
-      setImage(product.image);
-      setBrand(product.brand);
-      setCategory(product.category);
-      setCountInStock(product.countInStock);
-      setDescription(product.description);
-      setImage(product.image);
+      if (!product || product._id !== productId) {
+        dispatch(listProductDetails(productId));
+      } else {
+        setName(product.name);
+        setPrice(product.price);
+        setImage(product.image);
+        setBrand(product.brand);
+        setCategory(product.category);
+        setCountInStock(product.countInStock);
+        setDescription(product.description);
+        setImage(product.image);
+      }
     }
-  }, [productId, dispatch, product, navigate]);
+    //agr user ni exist karta ya jo url mein id hy wo store mein jo user hy uski id sy match ni karta to
+  }, [productId, dispatch, product, navigate, successUpdate]);
 
   const submitHandler = (e) => {
     e.preventDefault();
+    dispatch(
+      updateProduct({
+        _id: productId,
+        name,
+        price,
+        image,
+        brand,
+        category,
+        countInStock,
+        description,
+      })
+    );
   };
   return (
     <>
@@ -55,6 +81,8 @@ const ProductEditScreen = () => {
       </Link>
       <FormContainer>
         <h1>Edit Product</h1>
+        {loadingUpdate && <Loader />}
+        {errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
 
         {loading ? (
           <Loader />
