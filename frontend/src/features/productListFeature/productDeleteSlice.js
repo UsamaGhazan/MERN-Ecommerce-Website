@@ -30,7 +30,6 @@ export const deleteProduct = createAsyncThunk(
 const productDeleteSlice = createSlice({
   name: 'productDelete',
   initialState,
-  reducers: {},
   extraReducers: {
     //extra reducers sirf async operations k leye hein ... normally reducer use hongay
     [deleteProduct.pending]: (state) => {

@@ -7,6 +7,10 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { listProducts } from '../features/productListFeature/productListSlice';
 import { deleteProduct } from '../features/productListFeature/productDeleteSlice';
+import {
+  createProduct,
+  PRODUCT_CREATE_RESET,
+} from '../features/productListFeature/productCreateSlice';
 
 const ProductListScreen = () => {
   const dispatch = useDispatch();
@@ -21,25 +25,44 @@ const ProductListScreen = () => {
     success: successDelete,
   } = productDelete;
 
+  const productCreate = useSelector((store) => store.productCreate);
+  const {
+    loading: loadingCreate,
+    error: errorCreate,
+    success: successCreate,
+    product: createdProduct,
+  } = productCreate;
+
   const userLogin = useSelector((store) => store.userLogin);
   const { userInfo } = userLogin;
 
   useEffect(() => {
+    dispatch(PRODUCT_CREATE_RESET());
     //Agr admin logged in hy tab hi users ki list lao warna login screen pr ly jao
-    if (userInfo && userInfo.isAdmin) {
-      dispatch(listProducts());
-    } else {
+    if (!userInfo.isAdmin) {
       navigate('/login');
     }
-  }, [dispatch, userInfo, navigate, successDelete]);
+    if (successCreate) {
+      navigate(`/admin/product/${createdProduct._id}/edit`);
+    } else {
+      dispatch(listProducts());
+    }
+  }, [
+    dispatch,
+    userInfo,
+    navigate,
+    successDelete,
+    successCreate,
+    createdProduct,
+  ]);
 
   const deleteHandler = (id) => {
     if (window.confirm('Are you sure?')) {
       dispatch(deleteProduct(id));
     }
   };
-  const createProductHandler = (product) => {
-    console.log('product created');
+  const createProductHandler = () => {
+    dispatch(createProduct());
   };
   return (
     <>
@@ -55,6 +78,8 @@ const ProductListScreen = () => {
       </Row>
       {loadingDelete && <Loader />}
       {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
+      {loadingCreate && <Loader />}
+      {errorCreate && <Message variant='danger'>{errorCreate}</Message>}
       {loading ? (
         <Loader />
       ) : error ? (

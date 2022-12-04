@@ -31,10 +31,12 @@ const ProductScreen = () => {
   const dispatch = useDispatch();
   const productDetails = useSelector((state) => state.productDetails);
   const { loading, error, product } = productDetails;
+  // console.log(product.name);
   const { id } = useParams(); //This id is comming from route...This id is string... convert to number...
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log('Use effect ran');
     dispatch(listProductDetails(id));
   }, [dispatch, id]);
 

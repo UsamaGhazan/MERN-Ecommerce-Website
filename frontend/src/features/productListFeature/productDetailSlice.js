@@ -2,9 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 const initialState = {
-  loading: false,
-  product: [],
-  error: '',
+  product: { reviews: [] },
 };
 
 export const listProductDetails = createAsyncThunk(
@@ -23,7 +21,6 @@ export const listProductDetails = createAsyncThunk(
 const productDetailSlice = createSlice({
   name: 'productList',
   initialState,
-  reducers: {},
   extraReducers: {
     //extra reducers sirf async operations k leye hein ... normally reducer use hongay
     [listProductDetails.pending]: (state) => {

@@ -1,25 +1,22 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+
 const initialState = {};
-//paymentResult will come from Paypal
-export const payOrder = createAsyncThunk(
-  'orderPay',
-  async ({ orderId, paymentResult }, thunkAPI) => {
+
+export const createProduct = createAsyncThunk(
+  'createProduct',
+  async (NULL, thunkAPI) => {
     try {
       const {
         userLogin: { userInfo },
       } = thunkAPI.getState();
       const config = {
         headers: {
-          'Content-Type': 'application/json',
           Authorization: `Bearer ${userInfo.token}`,
         },
       };
-      const { data } = await axios.put(
-        `/api/orders/${orderId}/pay`,
-        paymentResult,
-        config
-      );
+      //post request kr rahy hein lekin koi data ni bhej rahy is leye empty object bhej rahy
+      const { data } = await axios.post(`/api/products`, {}, config);
       return data;
     } catch (error) {
       const newError =
@@ -32,32 +29,31 @@ export const payOrder = createAsyncThunk(
   }
 );
 
-const orderPaySlice = createSlice({
-  name: 'orderPay',
+const productCreateSlice = createSlice({
+  name: 'createProduct',
   initialState,
   reducers: {
-    ORDERS_PAY_RESET: () => {
+    PRODUCT_CREATE_RESET: () => {
       return {};
     },
   },
   extraReducers: {
     //extra reducers sirf async operations k leye hein ... normally reducer use hongay
-
-    [payOrder.pending]: (state) => {
+    [createProduct.pending]: (state) => {
       return {
         loading: true,
       };
     },
 
-    [payOrder.fulfilled]: (state, action) => {
+    [createProduct.fulfilled]: (state, action) => {
       return {
         loading: false,
-        //ab yahan pr humy koi data nai bhejna balky just paid success ka btana hy
         success: true,
+        product: action.payload,
       };
     },
 
-    [payOrder.rejected]: (state, action) => {
+    [createProduct.rejected]: (state, action) => {
       return {
         loading: false,
         error: action.payload,
@@ -65,6 +61,5 @@ const orderPaySlice = createSlice({
     },
   },
 });
-
-export const { ORDERS_PAY_RESET } = orderPaySlice.actions;
-export default orderPaySlice.reducer;
+export const { PRODUCT_CREATE_RESET } = productCreateSlice.actions;
+export default productCreateSlice.reducer;

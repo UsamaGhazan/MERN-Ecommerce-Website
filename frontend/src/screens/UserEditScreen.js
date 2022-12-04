@@ -57,6 +57,7 @@ const UserEditScreen = () => {
     user.isAdmin,
     navigate,
     successUpdate,
+    user,
   ]);
 
   const submitHandler = (e) => {
