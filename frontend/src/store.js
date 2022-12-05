@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
-import productListReducer from './features/productListFeature/productListSlice';
-import productDetailsReducer from './features/productListFeature/productDetailSlice';
+import productListReducer from './features/productFeature/productListSlice';
+import productDetailsReducer from './features/productFeature/productDetailSlice';
 import CartReducer from './features/addToCart/cartSlice';
 import userLoginReducer from './features/UserFeature/loginUserSlice';
 import userRegisterReducer from './features/UserFeature/registerUserSlice';
@@ -13,8 +13,8 @@ import myOrderListReducer from './features/OrderFeature/myOrderListSlice';
 import userListReducer from './features/UserFeature/userListSlice';
 import userDeleteReducer from './features/UserFeature/userDeleteSlice';
 import updateUserReducer from './features/UserFeature/updateUserSlice';
-import productDeleteReducer from './features/productListFeature/productDeleteSlice';
-import productCreateReducer from './features/productListFeature/productCreateSlice';
+import productDeleteReducer from './features/productFeature/productDeleteSlice';
+import productCreateReducer from './features/productFeature/productCreateSlice';
 import productUpdateReducer from './features/productFeature/productUpdateSlice';
 // yahan hum local storage sy data ly rahy hein jo cartSlice mein store kea tha ... JSON.parse is leye run kea hy kun k stringify kea tha data cartSlice mein
 const cartItemsFromStorage = localStorage.getItem('cartItems')

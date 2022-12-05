@@ -14,7 +14,7 @@ import {
   Form,
 } from 'react-bootstrap';
 import Rating from '../components/Rating';
-import { listProductDetails } from '../features/productListFeature/productDetailSlice';
+import { listProductDetails } from '../features/productFeature/productDetailSlice';
 
 const ProductScreen = () => {
   const [qty, setQty] = useState(1);
@@ -36,7 +36,6 @@ const ProductScreen = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log('Use effect ran');
     dispatch(listProductDetails(id));
   }, [dispatch, id]);
 

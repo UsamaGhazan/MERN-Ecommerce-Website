@@ -23,6 +23,7 @@
     "http-status-codes": "^2.2.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.5.4",
+    "multer": "^1.4.5-lts.1",
     "nodemon": "^2.0.19",
     "redux-persist": "^6.0.0"
   }

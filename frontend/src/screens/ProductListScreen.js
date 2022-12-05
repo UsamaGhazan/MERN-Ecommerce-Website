@@ -5,12 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { listProducts } from '../features/productListFeature/productListSlice';
-import { deleteProduct } from '../features/productListFeature/productDeleteSlice';
+import { listProducts } from '../features/productFeature/productListSlice';
+import { deleteProduct } from '../features/productFeature/productDeleteSlice';
 import {
   createProduct,
   PRODUCT_CREATE_RESET,
-} from '../features/productListFeature/productCreateSlice';
+} from '../features/productFeature/productCreateSlice';
 
 const ProductListScreen = () => {
   const dispatch = useDispatch();
