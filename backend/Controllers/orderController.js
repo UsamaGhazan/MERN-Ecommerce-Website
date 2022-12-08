@@ -21,7 +21,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
     throw new Error('No order items');
   } else {
     // A new empty object is created.
-    const order = new Order({
+    const order = await Order.create({
       orderItems,
       user: req.user._id, //logged in user ko attach kr rahy is order k sath
       shippingAddress,
@@ -88,8 +88,23 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
 const getMyOrders = asyncHandler(async (req, res) => {
   //aik sy zaida orders chaiyein is leye find use kea
   //loggedIn user ka orders milein gay
-  const orders = await Order.find({ user: req.user._id });
+  const orders = await Order.find({ user: req.user._id }); //-----------------------------
   res.json(orders);
 });
 
-export { addOrderItems, getOrderById, updateOrderToPaid, getMyOrders };
+//@desc Get all orders
+//GET /api/orders
+//Private/Admin
+const getAllOrders = asyncHandler(async (req, res) => {
+  //jo user us order sy associated hy uski id aur name ly rahy .populate k zariye
+  const orders = await Order.find({});
+  res.json(orders);
+});
+
+export {
+  addOrderItems,
+  getOrderById,
+  updateOrderToPaid,
+  getMyOrders,
+  getAllOrders,
+};

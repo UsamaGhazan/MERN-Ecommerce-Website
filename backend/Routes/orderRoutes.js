@@ -5,10 +5,12 @@ import {
   getOrderById,
   updateOrderToPaid,
   getMyOrders,
+  getAllOrders,
 } from '../Controllers/orderController.js';
-import { protect } from '../middleware/authMiddleware.js';
+import { protect, admin } from '../middleware/authMiddleware.js';
 
 router.post('/', protect, addOrderItems);
+router.get('/', protect, admin, getAllOrders);
 router.get('/myorders', protect, getMyOrders);
 //Make sure to pass route containing :id params to bottom otherwise anything u pass after '/' route will take it as id
 router.get('/:id', protect, getOrderById);

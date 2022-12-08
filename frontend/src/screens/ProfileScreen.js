@@ -34,7 +34,6 @@ const ProfileScreen = () => {
 
   const myOrderList = useSelector((store) => store.myOrderList);
   const { loading: loadingOrders, error: errorOrders, orders } = myOrderList;
-  console.log(orders);
 
   useEffect(() => {
     //Agr user logged nai hy to login page pr redirect kr rahy
@@ -142,7 +141,7 @@ const ProfileScreen = () => {
                 <tr key={order._id}>
                   <td>{order._id}</td>
                   {/* just date leny k leye */}
-                  <td>{order.paidAt.substring(0, 10)}</td>
+                  <td>{order.createdAt.substring(0, 10)}</td>
                   <td>{order.totalPrice}</td>
                   <td>
                     {order.isPaid ? (
