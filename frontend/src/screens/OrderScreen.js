@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PayPalButton } from 'react-paypal-button-v2';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {
   Button,
@@ -19,18 +19,29 @@ import {
   payOrder,
   ORDERS_PAY_RESET,
 } from '../features/OrderFeature/orderPaySlice';
+import {
+  ORDERS_DELIVER_RESET,
+  deliverOrder,
+} from '../features/OrderFeature/orderDeliveredSlice';
 
 const OrderScreen = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   //To get the id of order
   const params = useParams();
   const orderId = params.id;
   const [sdkReady, setSDKReady] = useState(false);
   const orderDetails = useSelector((store) => store.orderDetails);
   const { order, loading, error } = orderDetails;
+
+  const userLogin = useSelector((store) => store.userLogin);
+  const { userInfo } = userLogin;
   const orderPay = useSelector((store) => store.orderPay);
   //Humary pas pehly hi aik loading hy is leye yahan loading ko rename kar k loadingPay kr dea same with success
   const { success: successPay, loading: loadingPay } = orderPay;
+
+  const orderDeliver = useSelector((store) => store.orderDeliver);
+  const { success: successDeliver, loading: loadingDeliver } = orderDeliver;
 
   //agr jo order state mein store hy uski id orderId(param.id) sy match ni hoti to orderId lo aur uski details lao
   useEffect(() => {
@@ -39,6 +50,9 @@ const OrderScreen = () => {
     }
   }, [order, orderId, dispatch]);
   useEffect(() => {
+    if (!userInfo) {
+      navigate('/login');
+    }
     const addPayPalScript = async () => {
       //backend sy clientId milay gi
       const { data: clientId } = await axios.get('/api/config/paypal');
@@ -55,9 +69,10 @@ const OrderScreen = () => {
       document.body.appendChild(script);
     };
     //agr order ni hy tab b details show karo aur agr payment hogai hein tab b
-    if (!order || successPay) {
+    if (!order || successPay || successDeliver) {
       //agr reset nai karo gay to pay karny k bad refresh hota rahy ga (infinite loop)
       dispatch(ORDERS_PAY_RESET());
+      dispatch(ORDERS_DELIVER_RESET());
       dispatch(getOrderDetails(orderId));
     } else if (!order.isPaid) {
       if (!window.paypal) {
@@ -66,10 +81,22 @@ const OrderScreen = () => {
         setSDKReady(true);
       }
     }
-  }, [dispatch, orderId, successPay, order]);
+  }, [
+    dispatch,
+    orderId,
+    successPay,
+    order,
+    successDeliver,
+    navigate,
+    userInfo,
+  ]);
   //paymentResult is comming from paypal
   const successPaymentHandler = (paymentResult) => {
     dispatch(payOrder({ orderId, paymentResult }));
+  };
+
+  const deliverHandler = () => {
+    dispatch(deliverOrder(order));
   };
   return loading ? (
     <Loader />
@@ -96,7 +123,7 @@ const OrderScreen = () => {
                 {order.shippingAddress.country},
               </p>
               {order.isDelivered ? (
-                <Message variant='flush'>
+                <Message variant='success'>
                   {' '}
                   Delivered at {order.deliveredAt}
                 </Message>
@@ -197,6 +224,21 @@ const OrderScreen = () => {
                   )}
                 </ListGroupItem>
               )}
+              {loadingDeliver && <Loader />}
+              {userInfo &&
+                userInfo.isAdmin &&
+                order.isPaid &&
+                !order.isDelivered && (
+                  <ListGroupItem>
+                    <Button
+                      type='button '
+                      className='btn btn-block'
+                      onClick={deliverHandler}
+                    >
+                      Mark as delivered
+                    </Button>
+                  </ListGroupItem>
+                )}
             </ListGroup>
           </Card>
         </Col>

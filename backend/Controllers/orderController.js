@@ -59,7 +59,6 @@ const getOrderById = asyncHandler(async (req, res) => {
 //GET /api/orders/:id/pay
 //Private
 const updateOrderToPaid = asyncHandler(async (req, res) => {
-  //User ka name or email b chaiye jo is order k sath associated hy is leye populate use kr rahy
   const order = await Order.findById(req.params.id);
   //agr id k mutabiq order exist krta hy
   if (order) {
@@ -73,6 +72,25 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
       email_address: req.body.payer.email_address,
     };
 
+    const updatedOrder = await order.save();
+
+    res.json(updatedOrder);
+  } else {
+    res.status(404);
+    throw new Error('Order not found');
+  }
+});
+
+//@desc Update order to delivered
+//GET /api/orders/:id/deliver
+//Private/Admin
+const updateOrderToDelivered = asyncHandler(async (req, res) => {
+  //User ka name or email b chaiye jo is order k sath associated hy is leye populate use kr rahy
+  const order = await Order.findById(req.params.id);
+  //agr id k mutabiq order exist krta hy
+  if (order) {
+    order.isDelivered = true;
+    order.deliveredAt = Date.now();
     const updatedOrder = await order.save();
 
     res.json(updatedOrder);
@@ -97,7 +115,7 @@ const getMyOrders = asyncHandler(async (req, res) => {
 //Private/Admin
 const getAllOrders = asyncHandler(async (req, res) => {
   //jo user us order sy associated hy uski id aur name ly rahy .populate k zariye
-  const orders = await Order.find({});
+  const orders = await Order.find({}).populate('user', 'id name');
   res.json(orders);
 });
 
@@ -107,4 +125,5 @@ export {
   updateOrderToPaid,
   getMyOrders,
   getAllOrders,
+  updateOrderToDelivered,
 };
