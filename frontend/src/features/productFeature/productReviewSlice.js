@@ -1,13 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const initialState = {
-  product: {},
-};
+const initialState = {};
 
-export const updateProduct = createAsyncThunk(
-  'updateProduct',
-  async (product, thunkAPI) => {
+export const createProductReview = createAsyncThunk(
+  'reviewProduct',
+  async ({ productId, review }, thunkAPI) => {
+    console.log(productId, review);
     try {
       const {
         userLogin: { userInfo },
@@ -18,48 +17,40 @@ export const updateProduct = createAsyncThunk(
           Authorization: `Bearer ${userInfo.token}`,
         },
       };
-      const { data } = await axios.put(
-        `/api/products/${product._id}`,
-        product,
-        config
-      );
-      return data;
+      await axios.post(`/api/products/${productId}/reviews`, review, config);
     } catch (error) {
       const newError =
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message;
-      //This will end up in rejected section as payload... just error return karny sy fulfilled action run hora tha
       return thunkAPI.rejectWithValue(newError);
     }
   }
 );
 
-const productUpdateSlice = createSlice({
-  name: 'updateProduct',
+const productReviewSlice = createSlice({
+  name: 'reviewProduct',
   initialState,
   reducers: {
-    PRODUCT_UPDATE_RESET: () => {
+    PRODUCT_REVIEW_RESET: () => {
       return {};
     },
   },
   extraReducers: {
-    //extra reducers sirf async operations k leye hein ... normally reducer use hongay
-    [updateProduct.pending]: (state) => {
+    [createProductReview.pending]: (state) => {
       return {
         loading: true,
       };
     },
 
-    [updateProduct.fulfilled]: (state, action) => {
+    [createProductReview.fulfilled]: (state, action) => {
       return {
         loading: false,
         success: true,
-        product: action.payload,
       };
     },
 
-    [updateProduct.rejected]: (state, action) => {
+    [createProductReview.rejected]: (state, action) => {
       return {
         loading: false,
         error: action.payload,
@@ -67,5 +58,5 @@ const productUpdateSlice = createSlice({
     },
   },
 });
-export const { PRODUCT_UPDATE_RESET } = productUpdateSlice.actions;
-export default productUpdateSlice.reducer;
+export const { PRODUCT_REVIEW_RESET } = productReviewSlice.actions;
+export default productReviewSlice.reducer;

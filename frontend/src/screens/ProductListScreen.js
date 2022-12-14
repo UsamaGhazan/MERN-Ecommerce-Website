@@ -39,7 +39,7 @@ const ProductListScreen = () => {
   useEffect(() => {
     dispatch(PRODUCT_CREATE_RESET());
     //Agr admin logged in hy tab hi users ki list lao warna login screen pr ly jao
-    if (!userInfo.isAdmin) {
+    if (!userInfo || !userInfo.isAdmin) {
       navigate('/login');
     }
     if (successCreate) {

@@ -5,9 +5,16 @@ const reviewSchema = mongoose.Schema(
     name: { type: String, required: true },
     rating: { type: Number, required: true },
     comment: { type: String, required: true },
+    //user ko refer kar rahy ta k aik hi user dobara review na dy saky
+    user: {
+      //which admin created which product
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'User',
+    },
   },
   {
-    timeStamps: true,
+    timestamps: true,
   }
 );
 
@@ -39,7 +46,7 @@ const productSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    review: [reviewSchema],
+    reviews: [reviewSchema],
     rating: {
       //average of all reviews
       type: Number,

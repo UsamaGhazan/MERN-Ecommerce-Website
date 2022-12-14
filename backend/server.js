@@ -6,6 +6,7 @@ import productRoutes from './Routes/productRoutes.js';
 import userRoutes from './Routes/userRoutes.js';
 import orderRoutes from './Routes/orderRoutes.js';
 import uploadRoutes from './Routes/uploadRoutes.js';
+import morgan from 'morgan';
 import { notFound, errorHandler } from './middleware/errorHandlerMiddleware.js';
 
 dotenv.config();
@@ -13,6 +14,11 @@ dotenv.config();
 connectDB();
 
 const app = express();
+
+//for running only in development mode
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
 
 app.use(express.json());
 app.get('/', (req, res) => {
