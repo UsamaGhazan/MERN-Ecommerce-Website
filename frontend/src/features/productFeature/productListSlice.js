@@ -7,15 +7,20 @@ const initialState = {
   error: '',
 };
 
-export const listProducts = createAsyncThunk('getProductList', async () => {
-  //har function k bananay pr 3 lifecycle items milaein gay(see in extra reducers)
-  try {
-    const resp = await axios('/api/products');
-    return resp.data;
-  } catch (error) {
-    return error;
+export const listProducts = createAsyncThunk(
+  'getProductList',
+  //keyword default '' is lye dea hy k agr HomeScreen sy keyword ni milta to bydefault empty string pass hojaye
+  async (keyword = '') => {
+    console.log(keyword);
+    //har function k bananay pr 3 lifecycle items milaein gay(see in extra reducers)
+    try {
+      const resp = await axios(`/api/products?keyword=${keyword}`);
+      return resp.data;
+    } catch (error) {
+      return error;
+    }
   }
-});
+);
 
 const productListSlice = createSlice({
   name: 'productList',

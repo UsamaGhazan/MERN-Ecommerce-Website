@@ -46,6 +46,7 @@ const App = () => {
               element={<ProductEditScreen />}
             />
 
+            <Route path='/search/:keyword' element={<HomeScreen />} />
             <Route path='/' element={<HomeScreen />} />
 
             {/* nested routing ki waja sy path render hojaye ga chae id di ho ya na di ho.. aur yei humy chaiye is case mein*/}

@@ -2,7 +2,22 @@ import Product from '../Models/ProductModel.js';
 import asyncHandler from 'express-async-handler'; //to avoid try catch
 
 const getAllProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({});
+  //For searching
+  //query string ko access karny k leye req.query use karty
+  const keyword = req.query.keyword
+    ? {
+        //directly name:req.query is leye ni kr rahy kun k is case mein humy exact name dalna pary ga product search karna k leye
+        name: {
+          $regex: req.query.keyword,
+          //case-insensitive
+          $options: 'i',
+        },
+        //Agr keyword exist nai karta aur just '' empty string hy to simple brackets return kro(for getting all the products in find method below)
+      }
+    : {};
+  //sirf keyword is leye ni likha find method mein kun k wo pora object dy dy ga aur humy object k elements chaiyein
+  //agr keyword ni hy to sab products dy dy ga kun k {} return hora keyword mein
+  const products = await Product.find({ ...keyword });
   res.json(products);
 });
 

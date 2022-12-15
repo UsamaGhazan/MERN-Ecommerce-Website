@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap'; //only for bootstrap component ... otherwise use Link
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { logout } from '../features/UserFeature/loginUserSlice';
+import SearchBox from './SearchBox';
 const Header = () => {
   const dispatch = useDispatch();
   const userLogin = useSelector((store) => store.userLogin);
@@ -20,6 +21,8 @@ const Header = () => {
           </LinkContainer>
           <Navbar.Toggle aria-controls='navbarScroll' />
           <Navbar.Collapse id='navbarScroll'>
+            <SearchBox />
+
             <Nav
               className='ml-auto my-2 my-lg-0'
               style={{ maxHeight: '100px' }}

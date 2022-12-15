@@ -5,15 +5,18 @@ import Product from '../components/Product';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { listProducts } from '../features/productFeature/productListSlice';
+import { useParams } from 'react-router-dom';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
   const productList = useSelector((store) => store.productList);
   const { loading, error, products } = productList;
-
+  const { keyword } = useParams();
+  console.log(keyword);
   useEffect(() => {
-    dispatch(listProducts());
-  }, [dispatch]); //adding dispatch to dependency to avoid warning
+    //keyword agr ni hoga to sab products mil jaien gi
+    dispatch(listProducts(keyword));
+  }, [dispatch, keyword]); //adding dispatch to dependency to avoid warning
 
   return (
     <>
