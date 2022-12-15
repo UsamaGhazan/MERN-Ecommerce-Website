@@ -40,6 +40,10 @@ const App = () => {
             <Route path='/admin/userList' element={<UserListScreen />} />
             <Route path='/admin/user/:id/edit' element={<UserEditScreen />} />
             <Route path='/admin/productList' element={<ProductListScreen />} />
+            <Route
+              path='/admin/productList/:pageNumber'
+              element={<ProductListScreen />}
+            />
             <Route path='/admin/orderList' element={<OrderListScreen />} />
             <Route
               path='/admin/product/:id/edit'
@@ -47,6 +51,12 @@ const App = () => {
             />
 
             <Route path='/search/:keyword' element={<HomeScreen />} />
+            <Route path='/page/:pageNumber' element={<HomeScreen />} />
+            {/* Pagination for search results */}
+            <Route
+              path='/search/:keyword/page/:pageNumber'
+              element={<HomeScreen />}
+            />
             <Route path='/' element={<HomeScreen />} />
 
             {/* nested routing ki waja sy path render hojaye ga chae id di ho ya na di ho.. aur yei humy chaiye is case mein*/}

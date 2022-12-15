@@ -2,6 +2,11 @@ import Product from '../Models/ProductModel.js';
 import asyncHandler from 'express-async-handler'; //to avoid try catch
 
 const getAllProducts = asyncHandler(async (req, res) => {
+  //For pagination
+  const pageSize = 10;
+  //as a string query ati hy usko number mein convert kea hy
+  //Agr query ni hy to smjo k 1st page pr hy is leye or 1 kar dea hy
+  const page = Number(req.query.pageNumber) || 1;
   //For searching
   //query string ko access karny k leye req.query use karty
   const keyword = req.query.keyword
@@ -15,10 +20,15 @@ const getAllProducts = asyncHandler(async (req, res) => {
         //Agr keyword exist nai karta aur just '' empty string hy to simple brackets return kro(for getting all the products in find method below)
       }
     : {};
+  const count = await Product.countDocuments({ ...keyword });
   //sirf keyword is leye ni likha find method mein kun k wo pora object dy dy ga aur humy object k elements chaiyein
   //agr keyword ni hy to sab products dy dy ga kun k {} return hora keyword mein
-  const products = await Product.find({ ...keyword });
-  res.json(products);
+  // jitna pageSize hoga utni products get kry ga .limit method ki waja sy
+  //skip method sy next page pr pechly wali products skip hojaein gi
+  const products = await Product.find({ ...keyword })
+    .limit(pageSize)
+    .skip(pageSize * (page - 1));
+  res.json({ products, page, pages: Math.ceil(count / pageSize) });
 });
 
 const getSingleProduct = asyncHandler(async (req, res) => {

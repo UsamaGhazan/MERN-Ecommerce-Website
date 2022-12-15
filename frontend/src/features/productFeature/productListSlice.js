@@ -10,12 +10,15 @@ const initialState = {
 export const listProducts = createAsyncThunk(
   'getProductList',
   //keyword default '' is lye dea hy k agr HomeScreen sy keyword ni milta to bydefault empty string pass hojaye
-  async (keyword = '') => {
-    console.log(keyword);
-    //har function k bananay pr 3 lifecycle items milaein gay(see in extra reducers)
+  async ({ keyword = '', pageNumber = '' }) => {
+    console.log(keyword, pageNumber);
+    //keyword agr milay ga HomeScreen sy to theek hy warna '' pass hojaye ga and same for pageNumber
+    // 2 queries pass karny k leye & use karty
     try {
-      const resp = await axios(`/api/products?keyword=${keyword}`);
-      return resp.data;
+      const { data } = await axios(
+        `/api/products?keyword=${keyword}&pageNumber=${pageNumber}`
+      );
+      return data;
     } catch (error) {
       return error;
     }
@@ -37,7 +40,10 @@ const productListSlice = createSlice({
     [listProducts.fulfilled]: (state, action) => {
       return {
         loading: false,
-        products: action.payload,
+        //payload mein multiple chezein mil rahi hein object k through
+        products: action.payload.products,
+        pages: action.payload.pages,
+        page: action.payload.page,
       };
     },
 
