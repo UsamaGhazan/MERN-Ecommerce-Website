@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
+import Meta from '../components/Meta';
+
 import { getUsersList } from '../features/UserFeature/userListSlice';
 import { deleteUser } from '../features/UserFeature/userDeleteSlice';
 
@@ -33,6 +35,8 @@ const UserListScreen = () => {
   };
   return (
     <>
+      <Meta title='Users List' />
+
       <h1>Users</h1>
       {loading ? (
         <Loader />

@@ -5,6 +5,8 @@ import { Form, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
+import Meta from '../components/Meta';
+
 import FormContainer from '../components/FormContainer';
 import { getUserDetails } from '../features/UserFeature/userDetailsSlice';
 import { updateUser } from '../features/UserFeature/updateUserSlice';
@@ -66,6 +68,8 @@ const UserEditScreen = () => {
   };
   return (
     <>
+      <Meta title='Edit User' />
+
       <Link to='/admin/userList' className='btn btn-light my-3'>
         Go Back
       </Link>

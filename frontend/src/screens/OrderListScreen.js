@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
+import Meta from '../components/Meta';
+
 import { getAllOrdersList } from '../features/OrderFeature/allOrdersListSlice';
 
 const OrderListScreen = () => {
@@ -27,6 +29,8 @@ const OrderListScreen = () => {
 
   return (
     <>
+      <Meta title='Orders List' />
+
       <h1>Orders</h1>
       {loading ? (
         <Loader />

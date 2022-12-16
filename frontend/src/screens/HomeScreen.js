@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Row, Col } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { Row, Col, Button } from 'react-bootstrap';
 import Product from '../components/Product';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import Paginate from '../components/Paginate';
 import { listProducts } from '../features/productFeature/productListSlice';
 import { useParams } from 'react-router-dom';
+import Meta from '../components/Meta';
 import ProductCarousel from '../components/ProductCarousel';
 
 const HomeScreen = () => {
@@ -24,8 +26,21 @@ const HomeScreen = () => {
 
   return (
     <>
+      <Meta />
       {/* Agr keyword ni hy to mtlb k search ni kr raha user aur tab hum sirf carousel dikha rahy */}
-      {!keyword && <ProductCarousel />}
+      {!keyword ? (
+        <ProductCarousel />
+      ) : (
+        <Link to='/' className='btn btn-light'>
+          <Button
+            variant='outline-dark'
+            className='p-1'
+            style={{ boxShadow: 'none' }}
+          >
+            Go Back
+          </Button>
+        </Link>
+      )}
       <h1> Latest Products </h1>
       {loading ? (
         <Loader />

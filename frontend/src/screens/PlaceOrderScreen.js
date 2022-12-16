@@ -13,6 +13,8 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import CheckoutSteps from '../components/CheckoutSteps';
+import Meta from '../components/Meta';
+
 import {
   createOrder,
   ORDER_CREATE_RESET,
@@ -71,6 +73,8 @@ const PlaceOrderScreen = () => {
 
   return (
     <>
+      <Meta title='Place Order' />
+
       <CheckoutSteps step1 step2 step3 step4 />
       <Row>
         <Col md={8}>

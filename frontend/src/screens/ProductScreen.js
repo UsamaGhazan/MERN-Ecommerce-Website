@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
+import Meta from '../components/Meta';
 import {
   Row,
   Col,
@@ -17,6 +18,7 @@ import {
   FormLabel,
 } from 'react-bootstrap';
 import Rating from '../components/Rating';
+
 import { listProductDetails } from '../features/productFeature/productDetailSlice';
 import {
   createProductReview,
@@ -79,6 +81,7 @@ const ProductScreen = () => {
         <Message variant='danger'>{error}</Message>
       ) : (
         <>
+          <Meta title={product.name} />
           <Row>
             <Col md={6}>
               <Image src={product.image} alt={product.name} fluid></Image>

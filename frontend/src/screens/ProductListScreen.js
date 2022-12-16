@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import Paginate from '../components/Paginate';
+import Meta from '../components/Meta';
 import { listProducts } from '../features/productFeature/productListSlice';
 import { deleteProduct } from '../features/productFeature/productDeleteSlice';
 import {
@@ -62,15 +63,15 @@ const ProductListScreen = () => {
   ]);
 
   const deleteHandler = (id) => {
-    if (window.confirm('Are you sure?')) {
-      dispatch(deleteProduct(id));
-    }
+    dispatch(deleteProduct(id));
   };
   const createProductHandler = () => {
     dispatch(createProduct());
   };
   return (
     <>
+      <Meta title='Products List' />
+
       <Row className='align-items-center'>
         <Col>
           <h1>Products</h1>
