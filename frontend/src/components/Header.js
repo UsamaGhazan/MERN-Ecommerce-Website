@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap'; //only for bootstrap component ... otherwise use Link
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+
 import { logout } from '../features/UserFeature/loginUserSlice';
 import SearchBox from './SearchBox';
 const Header = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const userLogin = useSelector((store) => store.userLogin);
   const { userInfo } = userLogin;
 

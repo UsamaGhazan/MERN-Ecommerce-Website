@@ -42,6 +42,7 @@ export const loginUserSlice = createSlice({
   reducers: {
     logout: (state, action) => {
       localStorage.removeItem('userInfo');
+      return {};
     },
   },
   extraReducers: {
