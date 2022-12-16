@@ -11,7 +11,6 @@ export const listProducts = createAsyncThunk(
   'getProductList',
   //keyword default '' is lye dea hy k agr HomeScreen sy keyword ni milta to bydefault empty string pass hojaye
   async ({ keyword = '', pageNumber = '' }) => {
-    console.log(keyword, pageNumber);
     //keyword agr milay ga HomeScreen sy to theek hy warna '' pass hojaye ga and same for pageNumber
     // 2 queries pass karny k leye & use karty
     try {

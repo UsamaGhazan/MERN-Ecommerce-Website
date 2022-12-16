@@ -7,12 +7,12 @@ import Loader from '../components/Loader';
 import Paginate from '../components/Paginate';
 import { listProducts } from '../features/productFeature/productListSlice';
 import { useParams } from 'react-router-dom';
+import ProductCarousel from '../components/ProductCarousel';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
   const productList = useSelector((store) => store.productList);
   const { loading, error, products, page, pages } = productList;
-  console.log(products);
   const { keyword } = useParams();
   const pageNumb = useParams();
   //agr pageNumber milay to wo kr do warna 1
@@ -24,6 +24,8 @@ const HomeScreen = () => {
 
   return (
     <>
+      {/* Agr keyword ni hy to mtlb k search ni kr raha user aur tab hum sirf carousel dikha rahy */}
+      {!keyword && <ProductCarousel />}
       <h1> Latest Products </h1>
       {loading ? (
         <Loader />
